@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gender Data Visual</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/gender_style.css">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+  {% include 'includes/_navbar.html' %}
+    <h1>Employee Gender Distribution</h1>
+    <hr>
+    <div id="switch-button">
+        <input name="switchButton"
+               type="button"
+               value="Dept"
+               onclick="updateChart(this)" />
+    </div>
+
+    <div id="gender_chart" style="position:relative;"></div>
+
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="static/gender_app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+#age_chart{
+    width: 1000px;
+    height: 600px;
+    background-color: #ffffff;
+    margin: 25px auto;
+    border: 2px solid black;
+}
+h1{
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.x-axis path .x-axis line{
+    shape-rendering: crispEdges;
+}
+
+.x-axis text{
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.y-axis path .y-axis line{
+    shape-rendering: crispEdges;
+}
+
+.y-axis text{
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}

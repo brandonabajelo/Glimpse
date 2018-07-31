@@ -1,0 +1,53 @@
+#age_chart{
+    width: 1000px;
+    height: 700px;
+    background-color: #ffffff;
+    margin: 25px auto;
+    border: 2px solid black;
+}
+h1{
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.x-axis path .x-axis line{
+    shape-rendering: crispEdges;
+}
+
+.x-axis text{
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.y-axis path .y-axis line{
+    shape-rendering: crispEdges;
+}
+
+.y-axis text{
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+svg {
+    position: absolute;
+}
+
+#switch-button > input {
+    color: #08233e;
+    background-color: #6BAB90;
+    font: 2em Futura, ‘Century Gothic’, AppleGothic, sans-serif;
+    padding: 14px;
+    -moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px;
+    border-bottom:1px solid #9f9f9f;
+    cursor:pointer;
+
+    position: relative;
+    left: 50%;
+    border-radius: 4px;
+}
+
+#switch-button > input:hover{background-color: #39A2AE;}
+
+#switch-button > input:active{position:relative;top:2px;}

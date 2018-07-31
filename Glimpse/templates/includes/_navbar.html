@@ -1,0 +1,27 @@
+<nav class="navbar navbar-inverse ">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle = "collapse">
+        <span class="sr-only">Toggle Navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"> Glimpse </a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        {% if session['user'] == True %}
+        <li><a href = "/table">Data Table</a></li>
+        <li><a href = "/visualizations">Gender Visualizations</a></li>
+        <li><a href = "/ageVisualizations">Age Visualizations</a></li>
+        <li><a href = "/salaryVisualizations">Salary Visualizations</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href = "/logout">Sign Out</a></li>
+      </ul>
+    </div>
+    {% else %}
+  </div>
+  {% endif %}
+</nav>

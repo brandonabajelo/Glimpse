@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<!-- <!-suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript" language="javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+
+
+    <!--
+    <script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    -->
+</head>
+ <body>
+   <nav class="navbar navbar-inverse ">
+     <div class="container">
+       <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed" data-toggle = "collapse">
+           <span class="sr-only">Toggle Navigation</span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+         </button>
+         <a class="navbar-brand" href="/"> Glimpse </a>
+       </div>
+       <div id="navbar" class="collapse navbar-collapse">
+         <ul class="nav navbar-nav">
+           {% if session['user'] == True %}
+           <li><a href = "/table">Data Table</a></li>
+           <li><a href = "/visualizations">Gender Visualizations</a></li>
+           <li><a href = "/ageVisualizations">Age Visualizations</a></li>
+           <li><a href = "/salaryVisualizations">Salary Visualizations</a></li>
+         </ul>
+         <ul class="nav navbar-nav navbar-right">
+           <li><a href = "/logout">Sign Out</a></li>
+       </div>
+       {% else %}
+     </div>
+   {% endif %}
+   </nav>
+
+<script>
+    $(document).ready(function() {
+        // $('#myTable1').DataTable();
+        $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+            $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+        } );
+        //$(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function(e){
+        //    $.fn.dataTable.tables({visible: true, api: true }).columns.adjust();
+        //});
+
+
+        var myT1 = $('#myTable1.table').DataTable( {
+            ajax:           '/static/table_data/Finance.txt',
+            "processing": false,
+
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable1 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT1.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable1 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT1.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable1 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT1.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        var myT2 = $('#myTable2.table').DataTable( {
+            ajax:           '/static/table_data/Human_Resources.txt',
+            "processing": false,
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            // scrollY:        200,
+            //"deferLoading": 100,
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable2 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT2.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable2 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT2.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable2 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT2.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        var myT3 = $('#myTable3.table').DataTable( {
+            ajax:           '/static/table_data/Customer_Service.txt',
+            "processing": false,
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            // scrollY:        200,
+            //"deferLoading": 100,
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable3 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT3.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable3 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT3.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable3 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT3.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        var myT4 = $('#myTable4.table').DataTable( {
+            ajax:           '/static/table_data/Development.txt',
+            "processing": false,
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            // scrollY:        200,
+            //"deferLoading": 100,
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable4 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT4.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable4 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT4.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable4 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT4.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        var myT5 = $('#myTable5.table').DataTable( {
+            ajax:           '/static/table_data/Marketing.txt',
+            "processing": false,
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            // scrollY:        200,
+            //"deferLoading": 100,
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable5 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT5.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable5 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT5.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable5 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT5.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        var myT6 = $('#myTable6.table').DataTable( {
+            ajax:           '/static/table_data/Production.txt',
+            "processing": false,
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            // scrollY:        200,
+            //"deferLoading": 100,
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable6 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT6.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable6 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT6.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable6 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT6.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        var myT7 = $('#myTable7.table').DataTable( {
+            ajax:           '/static/table_data/Quality_Management.txt',
+            "processing": false,
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            // scrollY:        200,
+            //"deferLoading": 100,
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable7 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT7.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable7 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT7.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable7 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT7.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        var myT8 = $('#myTable8.table').DataTable( {
+            ajax:           '/static/table_data/Research.txt',
+            "processing": false,
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            // scrollY:        200,
+            //"deferLoading": 100,
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable8 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT8.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable8 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT8.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable8 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT8.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        var myT9 = $('#myTable9.table').DataTable( {
+            ajax:           '/static/table_data/Sales.txt',
+            "processing": false,
+            "columns": [
+                { "data": "emp_no" },
+                { "data": "last_name" },
+                { "data": "first_name" },
+                { "data": "gender" },
+                { "data": "hire_date" },
+                {
+                    "data": null,
+                    "defaultContent": "<button class='department_history_button'>Department History</button>" +
+                    "<button class='title_history_button'>Title History</button>" +
+                    "<button class='salary_history_button'>Salary History</button>"
+                }
+            ],
+            // scrollY:        200,
+            //"deferLoading": 100,
+            scrollCollapse: true,
+            paging:         true
+        } );
+
+        $('#myTable9 tbody').on( 'click', '.department_history_button', function () {
+            var data = myT9.row( $(this).parents('tr') ).data();
+            var history = data['departments'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s department history is: \n"+ historyTable );
+        } );
+
+        $('#myTable9 tbody').on( 'click', '.title_history_button', function () {
+            var data = myT9.row( $(this).parents('tr') ).data();
+            var history = data['titles'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s title history is: \n"+ historyTable );
+        } );
+
+        $('#myTable9 tbody').on( 'click', '.salary_history_button', function () {
+            var data = myT9.row( $(this).parents('tr') ).data();
+            var history = data['salaries'];
+            var historyTable = "\n";
+            for (var i =0; i < history.length; i++){
+                for (var k in history[i]){
+                    historyTable += k + ": " + history[i][k] + "\n";
+                }
+                historyTable += "\n"
+            }
+            alert( data['last_name'] + ", " + data['first_name'] +"'s salary history is: \n"+ historyTable );
+        } );
+
+        //Apply a search to the second table for the demo
+        //$('#myTable1').DataTable().search( 'New York' ).draw();
+    } );
+</script>
+<div>
+    <ul class="nav nav-tabs" role="tablist" style="width: 100%;">
+        <li class="active">
+            <a href="#tab-table1" data-toggle="tab" aria-expanded="true">Finance</a>
+        </li>
+        <li class="">
+            <a href="#tab-table2" data-toggle="tab" aria-expanded="true">Human Resources</a>
+        </li>
+        <li class="">
+            <a href="#tab-table3" data-toggle="tab" aria-expanded="true">Customer Service</a>
+        </li>
+        <li class="">
+            <a href="#tab-table4" data-toggle="tab" aria-expanded="true">Development</a>
+        </li>
+        <li class="">
+            <a href="#tab-table5" data-toggle="tab" aria-expanded="true">Marketing</a>
+        </li>
+        <li class="">
+            <a href="#tab-table6" data-toggle="tab" aria-expanded="true">Production</a>
+        </li>
+        <li class="">
+            <a href="#tab-table7" data-toggle="tab" aria-expanded="true">Quality Management</a>
+        </li>
+        <li class="">
+            <a href="#tab-table8" data-toggle="tab" aria-expanded="true">Research</a>
+        </li>
+        <li class="">
+            <a href="#tab-table9" data-toggle="tab" aria-expanded="true">Sales</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-table1">
+            <table id="myTable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="tab-table2">
+            <table id="myTable2" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="tab-table3">
+            <table id="myTable3" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="tab-table4">
+            <table id="myTable4" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="tab-table5">
+            <table id="myTable5" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="tab-table6">
+            <table id="myTable6" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="tab-table7">
+            <table id="myTable7" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="tab-table8">
+            <table id="myTable8" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="tab-table9">
+            <table id="myTable9" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Gender</th>
+                    <th>Hire Date</th>
+                    <th>Options</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- </body>
+</html> -->
